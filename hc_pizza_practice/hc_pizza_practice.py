@@ -55,7 +55,7 @@ def solver(pizzas, team_head_count):
     pizzas_by_teams = []
     pizza_indexes = list(range(len(pizzas)))
 
-    team_cluster_indexes = range(len(team_head_count))
+    team_cluster_indexes = list(range(len(team_head_count)))
 
     while len(team_cluster_indexes) :
       team_cluster_index = team_cluster_indexes.pop()
