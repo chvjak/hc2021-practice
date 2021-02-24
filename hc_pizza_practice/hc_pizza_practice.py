@@ -16,45 +16,6 @@ Pizza 2 has the given 3 ingredients
 Pizza 3 has the given 3 ingredients
 Pizza 4 has the given 2 ingredients
 '''
-#####################################################################
-# solver
-
-def get_pizzas(pizzas1, head_count):
-  if head_count <= len(pizzas1):
-    result = [head_count] 
-    
-    for i in range(head_count):
-        result.append( pizzas1.pop())
-
-  else:
-    result = []
-
-  return result
-
-def solver(pizzas, team_head_count):
-    pizzas_by_teams = []
-    pizza_indexes = list(range(len(pizzas)))
-    
-    
-    for team_cluster_index in reversed(range(len(team_head_count))):
-      for team_index in range(team_head_count[team_cluster_index]) :
-        head_count = team_cluster_index + 2
-        pizzas_for_team = get_pizzas(pizza_indexes, head_count)
-        if len(pizzas_for_team):
-            pizzas_by_teams.append(pizzas_for_team) 
-    
-        if not len(pizzas) :
-            break
-    
-      if not len(pizzas) :
-          break
-    return pizzas_by_teams
-
-# solver
-#####################################################################
-
-#####################################################################
-# reader
 
 def read_dataset(file_name):
     f = open(file_name)
@@ -74,6 +35,54 @@ def read_dataset(file_name):
     return pizzas, team_head_count
 # reader
 #####################################################################
+
+#####################################################################
+# solver
+
+def get_pizzas(pizzas1, head_count):
+  if head_count <= len(pizzas1):
+    result = [head_count] 
+    
+    for i in range(head_count):
+        result.append( pizzas1.pop())
+
+  else:
+    result = []
+
+  return result
+
+def solver(pizzas, team_head_count):
+    pizzas_by_teams = []
+    pizza_indexes = list(range(len(pizzas)))
+
+    team_cluster_indexes = range(len(team_head_count))
+
+    while len(team_cluster_indexes) :
+      team_cluster_index = team_cluster_indexes.pop()
+      for team_index in range(team_head_count[team_cluster_index]) :
+        head_count = team_cluster_index + 2
+        pizzas_for_team = get_pizzas(pizza_indexes, head_count)
+        if len(pizzas_for_team):
+            pizzas_by_teams.append(pizzas_for_team) 
+    
+        if not len(pizzas) :
+            break
+    
+      if not len(pizzas) :
+          break
+    return pizzas_by_teams
+
+def score(pizzas_by_teams, pizzas):
+    res = 0
+    for pt in pizzas_by_teams:
+        unique_ingredients = set(sum([pizzas[pi] for pi in pt[1:]], []))       # check itertools.chain
+        res += (len(unique_ingredients)) ** 2
+
+    return res
+
+# solver
+#####################################################################
+
 
 #####################################################################
 # writer
@@ -98,11 +107,14 @@ def write_solution(file_name, pizzas_by_teams):
 #####################################################################
 
 PATH = "/content/pizza/"
-OUT_PATH = "/content/pizza/out/"
+OUT_PATH = "/content/pizza/out/"        # makes submissions easier
 file_names = ["e_many_teams.in","c_many_ingredients.in","d_many_pizzas.in","a_example.in","b_little_bit_of_everything.in"]
 
 for file_name in file_names:
+    print("Processing " + file_name)
     pizzas, team_head_count = read_dataset(PATH + file_name)
     pizzas_by_teams  = solver(pizzas, team_head_count)
 
     write_solution(OUT_PATH + file_name + ".out", pizzas_by_teams)
+
+    print("Done. Score = " + str(score(pizzas_by_teams, pizzas)))
