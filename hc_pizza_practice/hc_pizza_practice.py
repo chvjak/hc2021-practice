@@ -53,7 +53,6 @@ def get_pizzas(pizza_indexes, pizzas, head_count):
   return result
 
 def solver(pizzas, team_head_count):
-    RANDOMIZATION_RATE = 50
     pizzas_by_teams = []
     sorted_pizza_indexes = list(range(len(pizzas)))
     sorted_pizza_indexes.sort(key=lambda pi : len(set(pizzas[pi])))
@@ -63,10 +62,12 @@ def solver(pizzas, team_head_count):
     while len(team_cluster_indexes) :
 
       # randomization
+      # TODO: try implementing randomization for other resources
+      # TODO: implement using .yield
       from random import uniform
+      RANDOMIZATION_RATE = 25
 
-      r = uniform(0, 100)
-      if r < RANDOMIZATION_RATE:
+      if uniform(0, 100) < RANDOMIZATION_RATE:
         pop_ix = int(uniform(0, len(team_cluster_indexes) - 1))
         team_cluster_index = team_cluster_indexes.pop(pop_ix)
       else:
@@ -88,7 +89,7 @@ def solver(pizzas, team_head_count):
 def score(pizzas_by_teams, pizzas):
     res = 0
     for pt in pizzas_by_teams:
-        unique_ingredients = set(sum([pizzas[pi] for pi in pt[1:]], []))       # check itertools.chain
+        unique_ingredients = set(sum([pizzas[pi] for pi in pt[1:]], []))       # TODO: check itertools.chain
         res += (len(unique_ingredients)) ** 2
 
     return res
