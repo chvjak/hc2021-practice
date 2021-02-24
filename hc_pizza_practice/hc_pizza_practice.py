@@ -110,6 +110,10 @@ PATH = "/content/pizza/"
 OUT_PATH = "/content/pizza/out/"        # makes submissions easier
 file_names = ["e_many_teams.in","c_many_ingredients.in","d_many_pizzas.in","a_example.in","b_little_bit_of_everything.in"]
 
+
+import time
+start = time.time()
+
 for file_name in file_names:
     print("Processing " + file_name)
     pizzas, team_head_count = read_dataset(PATH + file_name)
@@ -118,3 +122,6 @@ for file_name in file_names:
     write_solution(OUT_PATH + file_name + ".out", pizzas_by_teams)
 
     print("Done. Score = " + str(score(pizzas_by_teams, pizzas)))
+
+end = time.time()
+print("Elapsed time: " + str(end - start))
