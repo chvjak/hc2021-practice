@@ -110,11 +110,9 @@ PATH = "/content/pizza/"
 OUT_PATH = "/content/pizza/out/"        # makes submissions easier
 file_names = ["e_many_teams.in","c_many_ingredients.in","d_many_pizzas.in","a_example.in","b_little_bit_of_everything.in"]
 
+from multiprocessing import Pool
 
-import time
-start = time.time()
-
-for file_name in file_names:
+def process_file(file_name):
     print("Processing " + file_name)
     pizzas, team_head_count = read_dataset(PATH + file_name)
     pizzas_by_teams  = solver(pizzas, team_head_count)
@@ -123,5 +121,12 @@ for file_name in file_names:
 
     print("Done. Score = " + str(score(pizzas_by_teams, pizzas)))
 
-end = time.time()
-print("Elapsed time: " + str(end - start))
+import time
+start = time.time()
+
+if __name__ == '__main__':
+    with Pool(8) as p:
+        print(p.map(process_file, file_names))
+
+    end = time.time()
+    print("Elapsed time: " + str(end - start))
