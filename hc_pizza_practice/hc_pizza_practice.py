@@ -39,12 +39,13 @@ def read_dataset(file_name):
 #####################################################################
 # solver
 
-def get_pizzas(pizzas1, head_count):
-  if head_count <= len(pizzas1):
+def get_pizzas(pizza_indexes, pizzas, head_count):
+  if head_count <= len(pizza_indexes):
     result = [head_count] 
     
     for i in range(head_count):
-        result.append( pizzas1.pop())
+        pizza_index = pizza_indexes.pop()
+        result.append(pizza_index)
 
   else:
     result = []
@@ -53,7 +54,8 @@ def get_pizzas(pizzas1, head_count):
 
 def solver(pizzas, team_head_count):
     pizzas_by_teams = []
-    pizza_indexes = list(range(len(pizzas)))
+    sorted_pizza_indexes = list(range(len(pizzas)))
+    sorted_pizza_indexes.sort(key=lambda pi : len(set(pizzas[pi])))
 
     team_cluster_indexes = list(range(len(team_head_count)))
 
@@ -61,7 +63,7 @@ def solver(pizzas, team_head_count):
       team_cluster_index = team_cluster_indexes.pop()
       for team_index in range(team_head_count[team_cluster_index]) :
         head_count = team_cluster_index + 2
-        pizzas_for_team = get_pizzas(pizza_indexes, head_count)
+        pizzas_for_team = get_pizzas(sorted_pizza_indexes, pizzas, head_count)
         if len(pizzas_for_team):
             pizzas_by_teams.append(pizzas_for_team) 
     
@@ -108,7 +110,7 @@ def write_solution(file_name, pizzas_by_teams):
 
 PATH = "/content/pizza/"
 OUT_PATH = "/content/pizza/out/"        # makes submissions easier
-file_names = ["e_many_teams.in","c_many_ingredients.in","d_many_pizzas.in","a_example.in","b_little_bit_of_everything.in"]
+file_names = ["a_example.in", "e_many_teams.in","c_many_ingredients.in","d_many_pizzas.in","b_little_bit_of_everything.in"]
 
 
 import time
