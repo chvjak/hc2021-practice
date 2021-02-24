@@ -53,6 +53,7 @@ def get_pizzas(pizza_indexes, pizzas, head_count):
   return result
 
 def solver(pizzas, team_head_count):
+    RANDOMIZATION_RATE = 50
     pizzas_by_teams = []
     sorted_pizza_indexes = list(range(len(pizzas)))
     sorted_pizza_indexes.sort(key=lambda pi : len(set(pizzas[pi])))
@@ -60,7 +61,17 @@ def solver(pizzas, team_head_count):
     team_cluster_indexes = list(range(len(team_head_count)))
 
     while len(team_cluster_indexes) :
-      team_cluster_index = team_cluster_indexes.pop()
+
+      # randomization
+      from random import uniform
+
+      r = uniform(0, 100)
+      if r < RANDOMIZATION_RATE:
+        pop_ix = int(uniform(0, len(team_cluster_indexes) - 1))
+        team_cluster_index = team_cluster_indexes.pop(pop_ix)
+      else:
+          team_cluster_index = team_cluster_indexes.pop()
+
       for team_index in range(team_head_count[team_cluster_index]) :
         head_count = team_cluster_index + 2
         pizzas_for_team = get_pizzas(sorted_pizza_indexes, pizzas, head_count)
@@ -107,21 +118,30 @@ def write_solution(file_name, pizzas_by_teams):
 
 # writer
 #####################################################################
-
+MAX_RETRY = 10
 PATH = "/content/pizza/"
 OUT_PATH = "/content/pizza/out/"        # makes submissions easier
-file_names = ["a_example.in", "e_many_teams.in","c_many_ingredients.in","d_many_pizzas.in","b_little_bit_of_everything.in"]
+file_names = ["e_many_teams.in","c_many_ingredients.in","d_many_pizzas.in","a_example.in","b_little_bit_of_everything.in"]
+from pq import PQ
+
 
 
 import time
 start = time.time()
 
 for file_name in file_names:
+    
     print("Processing " + file_name)
-    pizzas, team_head_count = read_dataset(PATH + file_name)
-    pizzas_by_teams  = solver(pizzas, team_head_count)
 
-    write_solution(OUT_PATH + file_name + ".out", pizzas_by_teams)
+    solutions = PQ()
+    for i in range(MAX_RETRY):
+        print(".")  # TODO: learn progress bar (tqd?)
+        pizzas, team_head_count = read_dataset(PATH + file_name)
+        pizzas_by_teams  = solver(pizzas, team_head_count)
+        solutions.enque(score(pizzas_by_teams, pizzas), pizzas_by_teams)
+
+    best_solution = solutions.deque()
+    write_solution(OUT_PATH + file_name + ".out", best_solution )
 
     print("Done. Score = " + str(score(pizzas_by_teams, pizzas)))
 
