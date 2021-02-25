@@ -30,8 +30,21 @@ def read_dataset(file_name):
     team_head_count = [int(x.strip()) for x in l1[1:]]
     
     pizzas = []
+    unique_ingredients = {}
+    unique_ingredients_count = 0
+
     for p in lines[1:]:
-      pizzas.append(p.strip().split(" ")[1:])
+        raw_pizza = p.strip().split(" ")[1:]
+        encoded_pizza = []
+        for ingredient in raw_pizza :
+            if ingredient not in unique_ingredients.keys() :
+                unique_ingredients_count += 1
+                unique_ingredients[ingredient] = unique_ingredients_count 
+
+            encoded_pizza.append(unique_ingredients[ingredient])
+
+        pizzas.append(encoded_pizza)
+    
     return pizzas, team_head_count
 # reader
 #####################################################################
@@ -108,15 +121,7 @@ def write_solution(file_name, pizzas_by_teams):
 # writer
 #####################################################################
 
-PATH = "/content/pizza/"
-OUT_PATH = "/content/pizza/out/"        # makes submissions easier
-file_names = ["a_example.in", "e_many_teams.in","c_many_ingredients.in","d_many_pizzas.in","b_little_bit_of_everything.in"]
-
-
-import time
-start = time.time()
-
-for file_name in file_names:
+def process_file(file_name) :
     print("Processing " + file_name)
     pizzas, team_head_count = read_dataset(PATH + file_name)
     pizzas_by_teams  = solver(pizzas, team_head_count)
@@ -125,5 +130,16 @@ for file_name in file_names:
 
     print("Done. Score = " + str(score(pizzas_by_teams, pizzas)))
 
-end = time.time()
-print("Elapsed time: " + str(end - start))
+PATH = "/content/pizza/"
+OUT_PATH = "/content/pizza/out/"        # makes submissions easier
+file_names = ["a_example.in", "e_many_teams.in","c_many_ingredients.in","d_many_pizzas.in","b_little_bit_of_everything.in"]
+
+if __name__ == '__main__':
+    import time
+    start = time.time()
+
+    for f in file_names:
+        process_file(f)
+
+    end = time.time()
+    print("Elapsed time: " + str(end - start))

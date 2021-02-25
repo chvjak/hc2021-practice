@@ -4,13 +4,14 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>7b0ddd95-9a94-4a26-a612-1bfb9f612708</ProjectGuid>
     <ProjectHome>.</ProjectHome>
-    <StartupFile>hc_pizza_practice.py</StartupFile>
+    <StartupFile>data_science.py</StartupFile>
     <SearchPath>
     </SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
     <OutputPath>.</OutputPath>
     <Name>hc_pizza_practice</Name>
     <RootNamespace>hc_pizza_practice</RootNamespace>
+    <InterpreterId>Global|PythonCore|3.7</InterpreterId>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <DebugSymbols>true</DebugSymbols>
@@ -21,7 +22,20 @@
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="data_science.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="hc_pizza_practice.py" />
+    <Compile Include="mp_runner.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="perf_test.py">
+      <SubType>Code</SubType>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <InterpreterReference Include="Global|PythonCore|3.7" />
+    <InterpreterReference Include="Global|VisualStudio|pypy3.7-v7.3.3-win32" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets" />
   <!-- Uncomment the CoreCompile target to enable the Build command in
